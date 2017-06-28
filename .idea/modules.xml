@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FaceMask.iml" filepath="$PROJECT_DIR$/FaceMask.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FaceMaskGoggle.iml" filepath="$PROJECT_DIR$/FaceMaskGoggle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

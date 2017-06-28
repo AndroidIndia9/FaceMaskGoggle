@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.Log;
 
@@ -55,7 +57,10 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
         Log.d(TAG, "Rendered Image Bitmap Size " + newWidth + " , " + newHeight);
 
         int left = bitmap.getWidth() / 3;
-
+        float angle = getAngle(leftPosition, rightPosition);
+        double angleInRadian = Math.atan2(leftPosition.y - rightPosition.y, rightPosition.x - leftPosition.x);
+        left = (int) (left / Math.cos(angleInRadian));
+        Log.d(TAG, "angle -> " + String.valueOf(angle));
 //
 //        int remainingDistance = (int) (distance - mGoggleBitmap.getWidth());
 //        Bitmap bitmap = null;
@@ -68,6 +73,9 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
 //            int height = (int)((mGoggleBitmap.getHeight() * (width)) / (float) mGoggleBitmap.getWidth());
 //            bitmap = Bitmap.createScaledBitmap(mGoggleBitmap, width, height, true);
 //        }
+        Matrix matrix = new Matrix();
+        matrix.postRotate(-angle, leftPosition.x, leftPosition.y);
+        canvas.setMatrix(matrix);
         canvas.drawBitmap(bitmap, leftPosition.x - left, leftPosition.y - bitmap.getHeight() / 2, null);
     }
 
@@ -80,6 +88,16 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
         mRightOpen = rightOpen;
 
         postInvalidate();
+    }
+
+    private float getAngle(PointF leftPosition, PointF rightPosition ) {
+        float angle = (float) Math.toDegrees(Math.atan2(leftPosition.y - rightPosition.y, rightPosition.x - leftPosition.x));
+
+        if(angle < 0){
+            angle += 360;
+        }
+
+        return angle;
     }
 
 }
