@@ -26,6 +26,8 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
     private volatile boolean mRightOpen;
 
     private Bitmap mGoggleBitmap = null;
+    private float prevAngle = 0;
+    private PointF prevLeftPos = new PointF();
 
     public GoggleGraphics(Bitmap bitmap, GraphicOverlay overlay) {
         super(overlay);
@@ -59,7 +61,6 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
         int left = bitmap.getWidth() / 3;
         float angle = getAngle(leftPosition, rightPosition);
         double angleInRadian = Math.atan2(leftPosition.y - rightPosition.y, rightPosition.x - leftPosition.x);
-        left = (int) (left / Math.cos(angleInRadian));
         Log.d(TAG, "angle -> " + String.valueOf(angle));
 //
 //        int remainingDistance = (int) (distance - mGoggleBitmap.getWidth());
@@ -73,10 +74,22 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
 //            int height = (int)((mGoggleBitmap.getHeight() * (width)) / (float) mGoggleBitmap.getWidth());
 //            bitmap = Bitmap.createScaledBitmap(mGoggleBitmap, width, height, true);
 //        }
-        Matrix matrix = new Matrix();
-        matrix.postRotate(-angle, leftPosition.x, leftPosition.y);
-        canvas.setMatrix(matrix);
-        canvas.drawBitmap(bitmap, leftPosition.x - left, leftPosition.y - bitmap.getHeight() / 2, null);
+        if (Math.abs(angle - prevAngle) > 2.0f) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(-angle, leftPosition.x, leftPosition.y);
+            canvas.setMatrix(matrix);
+            left = (int) (left / Math.cos(angleInRadian));
+            canvas.drawBitmap(bitmap, leftPosition.x - left, leftPosition.y - bitmap.getHeight() / 2, null);
+            prevAngle = angle;
+            prevLeftPos = leftPosition;
+        } else {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(-prevAngle, prevLeftPos.x, prevLeftPos.y);
+            canvas.setMatrix(matrix);
+            left = (int) (left / Math.cos(Math.toRadians(prevAngle)));
+            canvas.drawBitmap(bitmap, prevLeftPos.x - left, prevLeftPos.y - bitmap.getHeight() / 2, null);
+        }
+
     }
 
     void updateEyes(PointF leftPosition, boolean leftOpen,

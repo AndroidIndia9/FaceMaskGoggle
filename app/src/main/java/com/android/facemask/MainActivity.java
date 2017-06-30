@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         mCameraSource = new CameraSource.Builder(context, detector)
                 .setFacing(facing)
                 .setRequestedPreviewSize(320, 240)
-                .setRequestedFps(60.0f)
+                .setRequestedFps(30.0f)
                 .setAutoFocusEnabled(true)
                 .build();
     }
