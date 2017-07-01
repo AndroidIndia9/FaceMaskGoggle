@@ -20,10 +20,8 @@ import java.util.logging.Logger;
 public class GoggleGraphics extends GraphicOverlay.Graphic {
     private static final String TAG = "GoggleGraphics";
     private volatile PointF mLeftPosition;
-    private volatile boolean mLeftOpen;
 
     private volatile PointF mRightPosition;
-    private volatile boolean mRightOpen;
 
     private Bitmap mGoggleBitmap = null;
     private float prevAngle = 0;
@@ -31,7 +29,7 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
 
     public GoggleGraphics(Bitmap bitmap, GraphicOverlay overlay) {
         super(overlay);
-        mGoggleBitmap = bitmap;
+//        mGoggleBitmap = bitmap;
     }
 
     @Override
@@ -42,75 +40,65 @@ public class GoggleGraphics extends GraphicOverlay.Graphic {
             return;
         }
 
-        PointF leftPosition =
-                new PointF(translateX(detectLeftPosition.x), translateY(detectLeftPosition.y));
-        PointF rightPosition =
-                new PointF(translateX(detectRightPosition.x), translateY(detectRightPosition.y));
-
-        // Use the inter-eye distance to set the size of the eyes.
-        float distance = (float) Math.sqrt(
-                Math.pow(rightPosition.x - leftPosition.x, 2) +
-                        Math.pow(rightPosition.y - leftPosition.y, 2));
-        Log.d(TAG, "distance " + distance);
-        int newWidth = (int)(distance * 2.5);
-        Bitmap bitmap = null;
-        int newHeight = (int)((mGoggleBitmap.getHeight() * (newWidth)) / (float) mGoggleBitmap.getWidth());
-        bitmap = Bitmap.createScaledBitmap(mGoggleBitmap, newWidth, newHeight, true);
-        Log.d(TAG, "Rendered Image Bitmap Size " + newWidth + " , " + newHeight);
-
-        int left = bitmap.getWidth() / 3;
-        float angle = getAngle(leftPosition, rightPosition);
-        double angleInRadian = Math.atan2(leftPosition.y - rightPosition.y, rightPosition.x - leftPosition.x);
-        Log.d(TAG, "angle -> " + String.valueOf(angle));
+//        PointF leftPosition =
+//                new PointF(translateX(detectLeftPosition.x), translateY(detectLeftPosition.y));
+//        PointF rightPosition =
+//                new PointF(translateX(detectRightPosition.x), translateY(detectRightPosition.y));
 //
-//        int remainingDistance = (int) (distance - mGoggleBitmap.getWidth());
+//        // Use the inter-eye distance to set the size of the eyes.
+//        float distance = (float) Math.sqrt(
+//                Math.pow(rightPosition.x - leftPosition.x, 2) +
+//                        Math.pow(rightPosition.y - leftPosition.y, 2));
+//        Log.d(TAG, "distance " + distance);
+//        int newWidth = (int)(distance * 2.5);
 //        Bitmap bitmap = null;
-//        if(remainingDistance > 0){
-//            int width = mGoggleBitmap.getWidth() + 2 * remainingDistance;
-//            int height = (int)((mGoggleBitmap.getHeight() * (width)) / (float) mGoggleBitmap.getWidth());
-//            bitmap = Bitmap.createScaledBitmap(mGoggleBitmap, width, height, true);
-//        }else{
-//            int width = mGoggleBitmap.getWidth() - 2 * remainingDistance;
-//            int height = (int)((mGoggleBitmap.getHeight() * (width)) / (float) mGoggleBitmap.getWidth());
-//            bitmap = Bitmap.createScaledBitmap(mGoggleBitmap, width, height, true);
+//        int newHeight = (int)((mGoggleBitmap.getHeight() * (newWidth)) / (float) mGoggleBitmap.getWidth());
+//        bitmap = Bitmap.createScaledBitmap(mGoggleBitmap, newWidth, newHeight, true);
+//        Log.d(TAG, "Rendered Image Bitmap Size " + newWidth + " , " + newHeight);
+
+//        int left = bitmap.getWidth() / 3;
+
+//        float angle = getAngle(leftPosition, rightPosition);
+//        double angleInRadian = Math.atan2(leftPosition.y - rightPosition.y, rightPosition.x - leftPosition.x);
+//
+//        Log.d(TAG, "angle -> " + String.valueOf(angle));
+
+//        canvas.drawBitmap(bitmap, leftPosition.x - left, leftPosition.y - bitmap.getHeight() / 2, null);
+
+
+//        if (Math.abs(angle - prevAngle) > 2.0f) {
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(-angle, leftPosition.x, leftPosition.y);
+//            canvas.setMatrix(matrix);
+//            left = (int) (left / Math.cos(angleInRadian));
+//            canvas.drawBitmap(bitmap, leftPosition.x - left, leftPosition.y - bitmap.getHeight() / 2, null);
+//            prevAngle = angle;
+//            prevLeftPos = leftPosition;
+//        } else {
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(-prevAngle, prevLeftPos.x, prevLeftPos.y);
+//            canvas.setMatrix(matrix);
+//            left = (int) (left / Math.cos(Math.toRadians(prevAngle)));
+//            canvas.drawBitmap(bitmap, prevLeftPos.x - left, prevLeftPos.y - bitmap.getHeight() / 2, null);
 //        }
-        if (Math.abs(angle - prevAngle) > 2.0f) {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(-angle, leftPosition.x, leftPosition.y);
-            canvas.setMatrix(matrix);
-            left = (int) (left / Math.cos(angleInRadian));
-            canvas.drawBitmap(bitmap, leftPosition.x - left, leftPosition.y - bitmap.getHeight() / 2, null);
-            prevAngle = angle;
-            prevLeftPos = leftPosition;
-        } else {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(-prevAngle, prevLeftPos.x, prevLeftPos.y);
-            canvas.setMatrix(matrix);
-            left = (int) (left / Math.cos(Math.toRadians(prevAngle)));
-            canvas.drawBitmap(bitmap, prevLeftPos.x - left, prevLeftPos.y - bitmap.getHeight() / 2, null);
-        }
 
     }
 
-    void updateEyes(PointF leftPosition, boolean leftOpen,
-                    PointF rightPosition, boolean rightOpen) {
+    void updateEyes(PointF leftPosition, PointF rightPosition) {
         mLeftPosition = leftPosition;
-        mLeftOpen = leftOpen;
 
         mRightPosition = rightPosition;
-        mRightOpen = rightOpen;
 
         postInvalidate();
     }
 
-    private float getAngle(PointF leftPosition, PointF rightPosition ) {
-        float angle = (float) Math.toDegrees(Math.atan2(leftPosition.y - rightPosition.y, rightPosition.x - leftPosition.x));
-
-        if(angle < 0){
-            angle += 360;
-        }
-
-        return angle;
-    }
+//    private float getAngle(PointF leftPosition, PointF rightPosition ) {
+//        float angle = (float) Math.toDegrees(Math.atan2(leftPosition.y - rightPosition.y, rightPosition.x - leftPosition.x));
+//
+//        if(angle < 0){
+//            angle += 360;
+//        }
+//        return angle;
+//    }
 
 }

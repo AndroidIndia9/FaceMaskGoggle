@@ -1,7 +1,10 @@
 package com.android.facemask.camera;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -25,17 +28,17 @@ public class CameraSourcePreview extends ViewGroup {
     private boolean mSurfaceAvailable;
     private CameraSource mCameraSource;
 
-    private GraphicOverlay mOverlay;
+    private GraphicOverlay mOverlay = null;
 
     public CameraSourcePreview(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
-        mStartRequested = false;
-        mSurfaceAvailable = false;
-
-        mSurfaceView = new SurfaceView(context);
-        mSurfaceView.getHolder().addCallback(new SurfaceCallback());
-        addView(mSurfaceView);
+//        mContext = context;
+//        mStartRequested = false;
+//        mSurfaceAvailable = false;
+//
+//        mSurfaceView = new SurfaceView(context);
+//        mSurfaceView.getHolder().addCallback(new SurfaceCallback());
+//        addView(mSurfaceView);
     }
 
     public void start(CameraSource cameraSource) throws IOException {

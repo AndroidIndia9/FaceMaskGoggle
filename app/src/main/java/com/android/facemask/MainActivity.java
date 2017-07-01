@@ -20,7 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.facemask.camera.GooglyFaceTracker;
+import com.android.facemask.camera.GoggleFaceTracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
+
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
 
@@ -144,10 +145,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Camera permission granted - initialize the camera source");
-            // we have permission, so create the camerasource
-            createCameraSource();
-            return;
+//            Log.d(TAG, "Camera permission granted - initialize the camera source");
+//            // we have permission, so create the camerasource
+//            createCameraSource();
+//            return;
         }
 
         Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
             // speed up detection, in that it can quit after finding a single face and can assume
             // that the nextIrisPosition face position is usually relatively close to the last seen
             // face position.
-            Tracker<Face> tracker = new GooglyFaceTracker(goggleImage, mGraphicOverlay);
+            Tracker<Face> tracker = new GoggleFaceTracker(goggleImage, mGraphicOverlay);
             processor = new LargestFaceFocusingProcessor.Builder(detector, tracker).build();
         } else {
             // For rear facing mode, a factory is used to create per-face tracker instances.  A
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             MultiProcessor.Factory<Face> factory = new MultiProcessor.Factory<Face>() {
                 @Override
                 public Tracker<Face> create(Face face) {
-                    return new GooglyFaceTracker(goggleImage, mGraphicOverlay);
+                    return new GoggleFaceTracker(goggleImage, mGraphicOverlay);
                 }
             };
             processor = new MultiProcessor.Builder<>(factory).build();
@@ -296,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
         // but may miss smaller faces, landmarks, or may not correctly detect eyes open/closed in
         // comparison to using higher camera resolutions.  If you have any of these issues, you may
         // want to increase the resolution.
+
         mCameraSource = new CameraSource.Builder(context, detector)
                 .setFacing(facing)
                 .setRequestedPreviewSize(320, 240)
@@ -322,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
         if (mCameraSource != null) {
             try {
                 mPreview.start(mCameraSource, mGraphicOverlay);
+//                mPreview.start(mCameraSource);
             } catch (IOException e) {
                 Log.e(TAG, "Unable to start camera source.", e);
                 mCameraSource.release();

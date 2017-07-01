@@ -3,6 +3,7 @@ package com.android.facemask.camera;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.util.Log;
 
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
@@ -16,11 +17,11 @@ import java.util.Map;
 /**
  * Created by shashank on 26/6/17.
  */
-public class GooglyFaceTracker extends Tracker<Face> {
-    private static final float EYE_CLOSED_THRESHOLD = 0.4f;
+public class GoggleFaceTracker extends Tracker<Face> {
+
+    private static final String TAG = "GoggleFaceTracker";
 
     private GraphicOverlay mOverlay;
-    //private GooglyEyesGraphic mEyesGraphic;
     private GoggleGraphics mGoggleGraphic;
 
     // Record the previously seen proportions of the landmark locations relative to the bounding box
@@ -28,10 +29,6 @@ public class GooglyFaceTracker extends Tracker<Face> {
     // face bounding box if the eye landmark is missing in a future update.
     private Map<Integer, PointF> mPreviousProportions = new HashMap<>();
 
-    // Similarly, keep track of the previous eye open state so that it can be reused for
-    // intermediate frames which lack eye landmarks and corresponding eye state.
-    private boolean mPreviousIsLeftOpen = true;
-    private boolean mPreviousIsRightOpen = true;
     private Bitmap mBitmap = null;
 
 
@@ -39,18 +36,17 @@ public class GooglyFaceTracker extends Tracker<Face> {
     // Methods
     //==============================================================================================
 
-    public GooglyFaceTracker(Bitmap bitmap, GraphicOverlay overlay) {
-        mOverlay = overlay;
-        mBitmap = bitmap;
+    public GoggleFaceTracker(Bitmap bitmap, GraphicOverlay overlay) {
+//        mOverlay = overlay;
+//        mBitmap = bitmap;
     }
 
     /**
-     * Resets the underlying googly eyes graphic and associated physics state.
+     * Resets the underlying google eye graphic.
      */
     @Override
     public void onNewItem(int id, Face face) {
-        //mEyesGraphic = new GooglyEyesGraphic(mOverlay);
-        mGoggleGraphic = new GoggleGraphics(mBitmap, mOverlay);
+//        mGoggleGraphic = new GoggleGraphics(mBitmap, mOverlay);
     }
 
     /**
@@ -60,35 +56,17 @@ public class GooglyFaceTracker extends Tracker<Face> {
      */
     @Override
     public void onUpdate(FaceDetector.Detections<Face> detectionResults, Face face) {
-//        mOverlay.add(mEyesGraphic);
-        mOverlay.add(mGoggleGraphic);
+//        mOverlay.add(mGoggleGraphic);
 
         updatePreviousProportions(face);
 
-        PointF leftPosition = getLandmarkPosition(face, Landmark.LEFT_EYE);
-        PointF rightPosition = getLandmarkPosition(face, Landmark.RIGHT_EYE);
-//
-//        float leftOpenScore = face.getIsLeftEyeOpenProbability();
-//        boolean isLeftOpen;
-//        if (leftOpenScore == Face.UNCOMPUTED_PROBABILITY) {
-//            isLeftOpen = mPreviousIsLeftOpen;
-//        } else {
-//            isLeftOpen = (leftOpenScore > EYE_CLOSED_THRESHOLD);
-//            mPreviousIsLeftOpen = isLeftOpen;
-//        }
-//
-//        float rightOpenScore = face.getIsRightEyeOpenProbability();
-//        boolean isRightOpen;
-//        if (rightOpenScore == Face.UNCOMPUTED_PROBABILITY) {
-//            isRightOpen = mPreviousIsRightOpen;
-//        } else {
-//            isRightOpen = (rightOpenScore > EYE_CLOSED_THRESHOLD);
-//            mPreviousIsRightOpen = isRightOpen;
-//        }
+//        PointF leftPosition = getLandmarkPosition(face, Landmark.LEFT_EYE);
+//        Log.d(TAG, "left eye position -> " + leftPosition);
+//        PointF rightPosition = getLandmarkPosition(face, Landmark.RIGHT_EYE);
+//        Log.d(TAG, "right eye Position -> " + rightPosition);
 
-//        mEyesGraphic.updateEyes(leftPosition, isLeftOpen, rightPosition, isRightOpen);
-//        mEyesGraphic.updateEyes(leftPosition, true, rightPosition, true);
-        mGoggleGraphic.updateEyes(leftPosition, true, rightPosition, true);
+
+//        mGoggleGraphic.updateEyes(leftPosition, rightPosition);
     }
 
     /**
@@ -98,8 +76,7 @@ public class GooglyFaceTracker extends Tracker<Face> {
      */
     @Override
     public void onMissing(FaceDetector.Detections<Face> detectionResults) {
-//        mOverlay.remove(mEyesGraphic);
-        mOverlay.remove(mGoggleGraphic);
+//        mOverlay.remove(mGoggleGraphic);
     }
 
     /**
@@ -108,8 +85,7 @@ public class GooglyFaceTracker extends Tracker<Face> {
      */
     @Override
     public void onDone() {
- //       mOverlay.remove(mEyesGraphic);
-        mOverlay.remove(mGoggleGraphic);
+//        mOverlay.remove(mGoggleGraphic);
     }
 
     //==============================================================================================
