@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mPreview.stop();
+//        mPreview.stop();
     }
 
     /**
@@ -130,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mCameraSource != null) {
-            mCameraSource.release();
-        }
+//        if (mCameraSource != null) {
+//            mCameraSource.release();
+//        }
     }
 
 
