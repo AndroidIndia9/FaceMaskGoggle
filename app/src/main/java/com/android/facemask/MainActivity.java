@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
+//        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
 
-        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
+//        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
 
         if (savedInstanceState != null) {
@@ -68,12 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
-        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource();
-        } else {
-            requestCameraPermission();
-        }
+
+//        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+//        if (rc == PackageManager.PERMISSION_GRANTED) {
+//            createCameraSource();
+//        } else {
+//            requestCameraPermission();
+//        }
     }
 
     private void requestCameraPermission() {
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        startCameraSource();
+//        startCameraSource();
     }
 
     /**
@@ -279,58 +280,60 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Creates the face detector and the camera.
      */
-    private void createCameraSource() {
-        Context context = getApplicationContext();
-        FaceDetector detector = createFaceDetector(context);
 
-        int facing = CameraSource.CAMERA_FACING_FRONT;
-        if (!mIsFrontFacing) {
-            facing = CameraSource.CAMERA_FACING_BACK;
-        }
-
-        // The camera source is initialized to use either the front or rear facing camera.  We use a
-        // relatively low resolution for the camera preview, since this is sufficient for this app
-        // and the face detector will run faster at lower camera resolutions.
-        //
-        // However, note that there is a speed/accuracy trade-off with respect to choosing the
-        // camera resolution.  The face detector will run faster with lower camera resolutions,
-        // but may miss smaller faces, landmarks, or may not correctly detect eyes open/closed in
-        // comparison to using higher camera resolutions.  If you have any of these issues, you may
-        // want to increase the resolution.
-
-        mCameraSource = new CameraSource.Builder(context, detector)
-                .setFacing(facing)
-                .setRequestedPreviewSize(320, 240)
-                .setRequestedFps(30.0f)
-                .setAutoFocusEnabled(true)
-                .build();
-    }
+//    private void createCameraSource() {
+//        Context context = getApplicationContext();
+//        FaceDetector detector = createFaceDetector(context);
+//
+//        int facing = CameraSource.CAMERA_FACING_FRONT;
+//        if (!mIsFrontFacing) {
+//            facing = CameraSource.CAMERA_FACING_BACK;
+//        }
+//
+//        // The camera source is initialized to use either the front or rear facing camera.  We use a
+//        // relatively low resolution for the camera preview, since this is sufficient for this app
+//        // and the face detector will run faster at lower camera resolutions.
+//        //
+//        // However, note that there is a speed/accuracy trade-off with respect to choosing the
+//        // camera resolution.  The face detector will run faster with lower camera resolutions,
+//        // but may miss smaller faces, landmarks, or may not correctly detect eyes open/closed in
+//        // comparison to using higher camera resolutions.  If you have any of these issues, you may
+//        // want to increase the resolution.
+//
+////        mCameraSource = new CameraSource.Builder(context, detector)
+////                .setFacing(facing)
+////                .setRequestedPreviewSize(320, 240)
+////                .setRequestedFps(30.0f)
+////                .setAutoFocusEnabled(true)
+////                .build();
+//    }
 
     /**
      * Starts or restarts the camera source, if it exists.  If the camera source doesn't exist yet
      * (e.g., because onResume was called before the camera source was created), this will be called
      * again when the camera source is created.
      */
-    private void startCameraSource() {
-        // check that the device has play services available.
-        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
-                getApplicationContext());
-        if (code != ConnectionResult.SUCCESS) {
-            Dialog dlg =
-                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
-            dlg.show();
-        }
 
-        if (mCameraSource != null) {
-            try {
-                mPreview.start(mCameraSource, mGraphicOverlay);
+//    private void startCameraSource() {
+//        // check that the device has play services available.
+//        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
+//                getApplicationContext());
+//        if (code != ConnectionResult.SUCCESS) {
+//            Dialog dlg =
+//                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
+//            dlg.show();
+//        }
+//
+//        if (mCameraSource != null) {
+//            try {
+////                mPreview.start(mCameraSource, mGraphicOverlay);
 //                mPreview.start(mCameraSource);
-            } catch (IOException e) {
-                Log.e(TAG, "Unable to start camera source.", e);
-                mCameraSource.release();
-                mCameraSource = null;
-            }
-        }
-    }
+//            } catch (IOException e) {
+//                Log.e(TAG, "Unable to start camera source.", e);
+//                mCameraSource.release();
+//                mCameraSource = null;
+//            }
+//        }
+//    }
 }
 
